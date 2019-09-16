@@ -145,43 +145,30 @@ contract ColonyNetwork is ColonyNetworkStorage {
   stoppable
   returns (address)
   {
-    require(currentColonyVersion > 0, "colony-network-not-initialised-cannot-create-colony");
-    require(_tokenAddress != address(0x0), "colony-token-invalid-address");
-    EtherRouter etherRouter = new EtherRouter();
-    IColony colony = IColony(address(etherRouter));
-    address resolverForLatestColonyVersion = colonyVersionResolver[currentColonyVersion]; // ignore-swc-107
-    etherRouter.setResolver(resolverForLatestColonyVersion); // ignore-swc-113
+    address colonyAddress = deployColony(_tokenAddress);
+    setFounderPermissions(colonyAddress);
+    return colonyAddress;
+  }
 
-    // Creating new instance of colony's authority
-    ColonyAuthority colonyAuthority = new ColonyAuthority(address(colony));
+  function createColonyWithOptions(
+    address _tokenAddress,
+    string memory _colonyName,
+    string memory _orbitdb,
+    bool _useExtensionManager
+  ) public stoppable returns (address)
+  {
+    address colonyAddress = deployColony(_tokenAddress);
 
-    DSAuth dsauth = DSAuth(etherRouter);
-    dsauth.setAuthority(colonyAuthority);
+    if (bytes(_colonyName).length > 0) {
+      IColony(colonyAddress).registerColonyLabel(_colonyName, _orbitdb);
+    }
 
-    colonyAuthority.setOwner(address(etherRouter));
+    if (_useExtensionManager) {
+      IColony(colonyAddress).setRootRole(extensionManagerAddress, true);
+    }
 
-    // Initialise the root (domain) local skill with defaults by just incrementing the skillCount
-    skillCount += 1;
-    colonyCount += 1;
-    colonies[colonyCount] = address(colony);
-    _isColony[address(colony)] = true;
-
-    colony.initialiseColony(address(this), _tokenAddress);
-
-    // Assign all permissions in root domain
-    colony.setRecoveryRole(msg.sender);
-    colony.setRootRole(msg.sender, true);
-    colony.setArbitrationRole(1, 0, msg.sender, 1, true);
-    colony.setArchitectureRole(1, 0, msg.sender, 1, true);
-    colony.setFundingRole(1, 0, msg.sender, 1, true);
-    colony.setAdministrationRole(1, 0, msg.sender, 1, true);
-
-    // Colony will not have owner
-    dsauth.setOwner(address(0x0));
-
-    emit ColonyAdded(colonyCount, address(etherRouter), _tokenAddress);
-
-    return address(etherRouter);
+    setFounderPermissions(colonyAddress);
+    return colonyAddress;
   }
 
   function addColonyVersion(uint _version, address _resolver) public
@@ -322,6 +309,52 @@ contract ColonyNetwork is ColonyNetworkStorage {
     feeInverse = _feeInverse;
 
     emit NetworkFeeInverseSet(_feeInverse);
+  }
+
+  function deployColony(address _tokenAddress) internal returns (address) {
+    require(currentColonyVersion > 0, "colony-network-not-initialised-cannot-create-colony");
+    require(_tokenAddress != address(0x0), "colony-token-invalid-address");
+    EtherRouter etherRouter = new EtherRouter();
+    IColony colony = IColony(address(etherRouter));
+    address resolverForLatestColonyVersion = colonyVersionResolver[currentColonyVersion]; // ignore-swc-107
+    etherRouter.setResolver(resolverForLatestColonyVersion); // ignore-swc-113
+
+    // Creating new instance of colony's authority
+    ColonyAuthority colonyAuthority = new ColonyAuthority(address(colony));
+
+    DSAuth dsauth = DSAuth(etherRouter);
+    dsauth.setAuthority(colonyAuthority);
+
+    colonyAuthority.setOwner(address(etherRouter));
+
+    // Initialise the root (domain) local skill with defaults by just incrementing the skillCount
+    skillCount += 1;
+    colonyCount += 1;
+    colonies[colonyCount] = address(colony);
+    _isColony[address(colony)] = true;
+
+    colony.initialiseColony(address(this), _tokenAddress);
+
+    emit ColonyAdded(colonyCount, address(etherRouter), _tokenAddress);
+
+    return address(etherRouter);
+  }
+
+  function setFounderPermissions(address _colonyAddress) internal {
+    require(DSAuth(_colonyAddress).owner() == address(this), "colony-network-not-colony-owner");
+
+    // Assign all permissions in root domain
+    IColony colony = IColony(_colonyAddress);
+    colony.setRecoveryRole(msg.sender);
+    colony.setRootRole(msg.sender, true);
+    colony.setArbitrationRole(1, 0, msg.sender, 1, true);
+    colony.setArchitectureRole(1, 0, msg.sender, 1, true);
+    colony.setFundingRole(1, 0, msg.sender, 1, true);
+    colony.setAdministrationRole(1, 0, msg.sender, 1, true);
+
+    // Colony will not have owner
+    DSAuth dsauth = DSAuth(_colonyAddress);
+    dsauth.setOwner(address(0x0));
   }
 
   function ascendSkillTree(uint _skillId, uint _parentSkillNumber) internal view returns (uint256) {
