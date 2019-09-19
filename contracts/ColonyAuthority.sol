@@ -79,6 +79,9 @@ contract ColonyAuthority is CommonAuthority {
     addRoleCapability(ROOT_ROLE, "updateColonyOrbitDB(string)");
     addRoleCapability(ROOT_ROLE, "setArbitrationRole(uint256,uint256,address,uint256,bool)");
     addRoleCapability(ARCHITECTURE_SUBDOMAIN_ROLE, "setArbitrationRole(uint256,uint256,address,uint256,bool)");
+
+    // Added in colony v4
+    addRoleCapability(ROOT_ROLE, "addExtension(address,bytes32,uint256,address,uint8[])");
   }
 
   function addRoleCapability(uint8 role, bytes memory sig) private {

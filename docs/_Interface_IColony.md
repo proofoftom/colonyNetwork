@@ -4,7 +4,7 @@ section: Interface
 order: 3
 ---
 
-
+  
 ## Interface Methods
 
 ### `addDomain`
@@ -150,37 +150,6 @@ Mark a task as complete after the due date has passed. This allows the task to b
 |Name|Type|Description|
 |---|---|---|
 |_id|uint256|Id of the task
-
-
-### `emitDomainReputationPenalty`
-
-Emit a negative domain reputation update. Available only to Arbitration role holders.
-
-
-**Parameters**
-
-|Name|Type|Description|
-|---|---|---|
-|_permissionDomainId|uint256|The domainId in which I hold the Arbitration role.
-|_childSkillIndex|uint256|The index that the `_domainId` is relative to `_permissionDomainId`, (only used if `_permissionDomainId` is different to `_domainId`)
-|_domainId|uint256|The domain where the user will lose reputation.
-|_user|address|The user who will lose reputation.
-|_amount|int256|The (negative) amount of reputation to lose.
-
-
-### `emitSkillReputationPenalty`
-
-Emit a negative skill reputation update. Available only to Arbitration role holders.
-
-
-**Parameters**
-
-|Name|Type|Description|
-|---|---|---|
-|_permissionDomainId|uint256|The domainId in which I hold the Arbitration role.
-|_skillId|uint256|The skill where the user will lose reputation.
-|_user|address|The user who will lose reputation.
-|_amount|int256|The (negative) amount of reputation to lose.
 
 
 ### `executeTaskChange`
@@ -631,6 +600,27 @@ Gets the bytes32 representation of the roles for a user in a given domain
 |Name|Type|Description|
 |---|---|---|
 |roles|bytes32|bytes32 representation of the roles
+
+### `hasInheritedUserRole`
+
+Check whether a given user has a given role for the colony, in a child domain. Calls the function of the same name on the colony's authority contract and an internal inheritence validator function
+
+
+**Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|_user|address|The user whose role we want to check
+|_domainId|uint256|Domain in which the caller has the role
+|_role|ColonyRole|The role we want to check for
+|_childSkillIndex|uint256|The index that the `_childDomainId` is relative to `_domainId`
+|_childDomainId|uint256|The domain where we want to use the role
+
+**Return Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|hasRole|bool|Boolean indicating whether the given user has the given role in domain
 
 ### `hasUserRole`
 
