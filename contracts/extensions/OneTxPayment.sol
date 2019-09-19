@@ -18,24 +18,16 @@
 pragma solidity 0.5.8;
 pragma experimental ABIEncoderV2;
 
-import "./../ColonyAuthority.sol";
-import "./../ColonyDataTypes.sol";
-import "./../IColony.sol";
-import "./../IColonyNetwork.sol";
+import "../ColonyAuthority.sol";
+import "../ColonyDataTypes.sol";
+import "../IColonyNetwork.sol";
+import "./ColonyExtension.sol";
 
 // ignore-file-swc-108
 
-contract OneTxPayment {
+contract OneTxPayment is ColonyExtension {
   bytes4 constant ADD_PAYMENT_SIG = bytes4(keccak256("addPayment(uint256,uint256,address,address,uint256,uint256,uint256)"));
   bytes4 constant MOVE_FUNDS_SIG = bytes4(keccak256("moveFundsBetweenPots(uint256,uint256,uint256,uint256,uint256,uint256,address)"));
-
-  IColony colony;
-  IColonyNetwork colonyNetwork;
-
-  constructor(address _colony) public {
-    colony = IColony(_colony);
-    colonyNetwork = IColonyNetwork(colony.getColonyNetwork());
-  }
 
   /// @notice Completes a colony payment in a single transaction
   /// @dev Assumes that each entity holds administration and funding roles in the same domain,
@@ -157,7 +149,7 @@ contract OneTxPayment {
       uint256 domainSkillId = colony.getDomain(_domainId).skillId;
       require(domainSkillId > 0, "colony-one-tx-payment-domain-does-not-exist");
 
-      uint256 childSkillId = colonyNetwork.getChildSkillId(permissionSkillId, _callerChildSkillIndex);
+      uint256 childSkillId = IColonyNetwork(colony.getColonyNetwork()).getChildSkillId(permissionSkillId, _callerChildSkillIndex);
       require(childSkillId == domainSkillId, "colony-one-tx-payment-bad-child-skill");
     }
   }
