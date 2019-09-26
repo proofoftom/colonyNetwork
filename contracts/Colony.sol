@@ -358,6 +358,8 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     // Remove from authority
     ColonyAuthority colonyAuthority = ColonyAuthority(address(authority));
     colonyAuthority.setRoleCapability(uint8(ColonyRole.Administration), address(this), SIG2, false);
+
+    // Add to authority
     colonyAuthority.setRoleCapability(uint8(ColonyRole.Root), address(this), SIG3, true);
   }
 
