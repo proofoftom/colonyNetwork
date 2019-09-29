@@ -243,10 +243,10 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     return colonyNetwork.addColonyVersion(_version, _resolver);
   }
 
-  function addExtension(address _manager, bytes32 _extensionId, uint256 _version, address _resolver, uint8[] memory _roles)
+  function addExtension(address _manager, bytes32 _extensionId, address _resolver, uint8[] memory _roles)
   public stoppable auth
   {
-    ExtensionManager(_manager).addExtension(_extensionId, _version, _resolver, _roles);
+    ExtensionManager(_manager).addExtension(_extensionId, _resolver, _roles);
   }
 
   function addDomain(uint256 _permissionDomainId, uint256 _childSkillIndex, uint256 _parentDomainId) public
@@ -332,7 +332,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
   bytes4 constant SIG6 = bytes4(keccak256("setExpenditureClaimDelay(uint256,uint256,uint256,uint256,uint256)"));
 
   // Add extension manager
-  bytes4 constant SIG7 = bytes4(keccak256("addExtension(address,bytes32,uint256,address,uint8[])"));
+  bytes4 constant SIG7 = bytes4(keccak256("addExtension(address,bytes32,address,uint8[])"));
 
   // v3 to v4
   function finishUpgrade() public always {

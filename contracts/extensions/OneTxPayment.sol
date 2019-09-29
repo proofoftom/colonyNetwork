@@ -31,6 +31,11 @@ contract OneTxPayment is ColonyExtension {
 
   IColonyNetwork colonyNetwork;
 
+  /// @notice Returns the version of the extension
+  function version() public pure returns (uint256) {
+    return 1;
+  }
+
   /// @notice Configures the extension
   /// @param _colony The colony in which the extension holds permissions
   function install(address _colony) public auth {
@@ -44,9 +49,8 @@ contract OneTxPayment is ColonyExtension {
   function upgrade() public auth {}
 
   /// @notice Called when uninstalling the extension
-  /// @param _beneficiary The address which will receive the extension's ether
-  function uninstall(address payable _beneficiary) public auth {
-    selfdestruct(_beneficiary);
+  function uninstall() public auth {
+    selfdestruct(address(uint160(address(colony))));
   }
 
   /// @notice Completes a colony payment in a single transaction
@@ -100,7 +104,6 @@ contract OneTxPayment is ColonyExtension {
     // Claim payout on behalf of the recipient
     colony.claimPayment(paymentId, _token);
   }
-
 
   /// @notice Completes a colony payment in a single transaction
   /// @dev Assumes that each entity holds administration and funding roles in the same domain,
