@@ -23,6 +23,7 @@ import "./EtherRouter.sol";
 import "./ColonyNetworkStorage.sol";
 import "./IReputationMiningCycle.sol";
 import "./IColony.sol";
+import "./extensions/ExtensionManager.sol";
 
 
 contract ColonyNetwork is ColonyNetworkStorage {
@@ -108,6 +109,22 @@ contract ColonyNetwork is ColonyNetworkStorage {
 
   function getMiningResolver() public view returns (address) {
     return miningCycleResolver;
+  }
+
+  function setExtensionManager(address _extensionManagerAddress) public
+  stoppable calledByMetaColony
+  {
+    extensionManagerAddress = _extensionManagerAddress;
+  }
+
+  function getExtensionManager() public view returns (address) {
+    return extensionManagerAddress;
+  }
+
+  function addExtension(bytes32 _extensionId, address _resolver, uint8[] memory _roles)
+  public stoppable calledByMetaColony
+  {
+    ExtensionManager(extensionManagerAddress).addExtension(_extensionId, _resolver, _roles);
   }
 
   function createMetaColony(address _tokenAddress) public

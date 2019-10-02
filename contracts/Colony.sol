@@ -20,7 +20,6 @@ pragma experimental ABIEncoderV2;
 
 import "./ColonyStorage.sol";
 import "./IEtherRouter.sol";
-import "./extensions/ExtensionManager.sol";
 
 
 contract Colony is ColonyStorage, PatriciaTreeProofs {
@@ -243,10 +242,16 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     return colonyNetwork.addColonyVersion(_version, _resolver);
   }
 
-  function addExtension(address _manager, bytes32 _extensionId, address _resolver, uint8[] memory _roles)
+  function setExtensionManager(address _extensionManagerAddress)
   public stoppable auth
   {
-    ExtensionManager(_manager).addExtension(_extensionId, _resolver, _roles);
+    IColonyNetwork(colonyNetworkAddress).setExtensionManager(_extensionManagerAddress);
+  }
+
+  function addExtension(bytes32 _extensionId, address _resolver, uint8[] memory _roles)
+  public stoppable auth
+  {
+    IColonyNetwork(colonyNetworkAddress).addExtension(_extensionId, _resolver, _roles);
   }
 
   function addDomain(uint256 _permissionDomainId, uint256 _childSkillIndex, uint256 _parentDomainId) public
@@ -332,7 +337,8 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
   bytes4 constant SIG6 = bytes4(keccak256("setExpenditureClaimDelay(uint256,uint256,uint256,uint256,uint256)"));
 
   // Add extension manager
-  bytes4 constant SIG7 = bytes4(keccak256("addExtension(address,bytes32,address,uint8[])"));
+  bytes4 constant SIG7 = bytes4(keccak256("setExtensionManager(address"));
+  bytes4 constant SIG8 = bytes4(keccak256("addExtension(bytes32,address,uint8[])"));
 
   // v3 to v4
   function finishUpgrade() public always {
@@ -352,6 +358,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
 
     // Add extension manager
     colonyAuthority.setRoleCapability(uint8(ColonyRole.Root), address(this), SIG7, true);
+    colonyAuthority.setRoleCapability(uint8(ColonyRole.Root), address(this), SIG8, true);
   }
 
   function checkNotAdditionalProtectedVariable(uint256 _slot) public view recovery {
