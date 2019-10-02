@@ -20,6 +20,21 @@ Adds a new Colony contract version and the address of associated `_resolver` con
 |_resolver|address|Address of the `Resolver` contract which will be used with the underlying `EtherRouter` contract
 
 
+### `addExtension`
+
+Add a new extension/version to the ExtensionManager.
+
+*Note: Calls `ExtensionManager.addExtension`.*
+
+**Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|_extensionId|bytes32|keccak256 hash of the extension name, used as an indentifier
+|_resolver|address|The deployed resolver containing the extension contract logic
+|_roles|uint8[]|An array containing the roles required by the extension
+
+
 ### `addr`
 
 Returns the address the supplied node resolves do, if we are the resolver.
@@ -216,6 +231,18 @@ Returns the address of the ENSRegistrar for the Network.
 |Name|Type|Description|
 |---|---|---|
 |address|address|The address the ENSRegistrar resolves to
+
+### `getExtensionManager`
+
+Get the address for the ExtensionManager.
+
+
+
+**Return Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|extensionManagerAddress|address|Address of the ExtensionManager contract
 
 ### `getFeeInverse`
 
@@ -497,6 +524,18 @@ Register a "user.joincolony.eth" label.
 |---|---|---|
 |username|string|The label to register
 |orbitdb|string|The path of the orbitDB database associated with the user profile
+
+
+### `setExtensionManager`
+
+Set the address for the ExtensionManager.
+
+
+**Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|_extensionManagerAddress|address|Address of the ExtensionManager contract
 
 
 ### `setFeeInverse`

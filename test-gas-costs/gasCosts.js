@@ -1,7 +1,6 @@
 /* globals artifacts */
 
 import path from "path";
-import { ethers } from "ethers";
 import { TruffleLoader } from "@colony/colony-js-contract-loader-fs";
 
 import {
@@ -215,7 +214,7 @@ contract("All", function(accounts) {
 
       // 1 transaction payment
       const oneTxExtension = await OneTxPayment.new();
-      await oneTxExtension.install(colony.address, ethers.constants.AddressZero);
+      await oneTxExtension.install(colony.address);
       await colony.setAdministrationRole(1, 0, oneTxExtension.address, 1, true);
       await colony.setFundingRole(1, 0, oneTxExtension.address, 1, true);
 

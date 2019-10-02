@@ -11,13 +11,12 @@ order: 4
 
 Add a new extension/version to the ExtensionManager.
 
-*Note: Calls `IExtensionManager.addExtension`.*
+*Note: Calls `IColonyNetwork.addExtension`.*
 
 **Parameters**
 
 |Name|Type|Description|
 |---|---|---|
-|_manager|address|Address of the ExtensionManager contract
 |_extensionId|bytes32|keccak256 hash of the extension name, used as an indentifier
 |_resolver|address|The deployed resolver containing the extension contract logic
 |_roles|uint8[]|An array containing the roles required by the extension
@@ -73,6 +72,19 @@ Mints CLNY in the Meta Colony and transfers them to the colony network. Only all
 |Name|Type|Description|
 |---|---|---|
 |_wad|uint256|Amount to mint and transfer to the colony network
+
+
+### `setExtensionManager`
+
+Set the address for the ExtensionManager.
+
+*Note: Calls `IColonyNetwork.setExtensionManager`.*
+
+**Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|_extensionManagerAddress|address|Address of the ExtensionManager contract
 
 
 ### `setNetworkFeeInverse`
