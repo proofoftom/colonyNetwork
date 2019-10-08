@@ -150,7 +150,7 @@ contract ColonyNetwork is ColonyNetworkStorage {
     return colonyAddress;
   }
 
-  function createColonyWithOptions(
+  function createColony(
     address _tokenAddress,
     string memory _colonyName,
     string memory _orbitdb,

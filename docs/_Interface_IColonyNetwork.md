@@ -105,8 +105,9 @@ Calculate raw miner weight in WADs.
 
 ### `createColony`
 
-Creates a new colony in the network. Note that the token ownership (if there is one) has to be transferred to the newly created colony.
+Creates a new colony in the network.
 
+*Note: This is now deprecated and will be removed in a future version Note that the token ownership (if there is one) has to be transferred to the newly created colony.*
 
 **Parameters**
 
@@ -120,19 +121,20 @@ Creates a new colony in the network. Note that the token ownership (if there is 
 |---|---|---|
 |colonyAddress|address|Address of the newly created colony
 
-### `createColonyWithOptions`
+### `createColony`
 
-Creates a new colony in the network, with an ENS label. Note that the token ownership (if there is one) has to be transferred to the newly created colony Additionally token can optionally support `mint` as defined in `ERC20Extended` Support for `mint` is mandatory only for the Meta Colony Token
+Creates a new colony in the network.
 
+*Note: This is now deprecated and will be removed in a future version Note that the token ownership (if there is one) has to be transferred to the newly created colony.*
 
 **Parameters**
 
 |Name|Type|Description|
 |---|---|---|
-|_tokenAddress|address|Address of an ERC20 token to serve as the colony token
-|_colonyName|string|The label to register (if null, no label is registered)
-|_orbitdb|string|The path of the orbitDB database associated with the user profile
-|_useExtensionManager|bool|If true, give the ExtensionManager the root role in the colony
+|_tokenAddress|address|Address of an ERC20 token to serve as the colony token. Additionally token can optionally support `mint` as defined in `ERC20Extended`. Support for `mint` is mandatory only for the Meta Colony Token.
+|_colonyName|string|
+|_orbitdb|string|
+|_useExtensionManager|bool|
 
 **Return Parameters**
 
@@ -251,6 +253,18 @@ Returns the address of the ENSRegistrar for the Network.
 |Name|Type|Description|
 |---|---|---|
 |address|address|The address the ENSRegistrar resolves to
+
+### `getExtensionManager`
+
+Get the address for the ExtensionManager.
+
+
+
+**Return Parameters**
+
+|Name|Type|Description|
+|---|---|---|
+|extensionManagerAddress|address|Address of the ExtensionManager contract
 
 ### `getFeeInverse`
 
