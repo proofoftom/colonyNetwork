@@ -252,18 +252,6 @@ Returns the address of the ENSRegistrar for the Network.
 |---|---|---|
 |address|address|The address the ENSRegistrar resolves to
 
-### `getExtensionManager`
-
-Get the address for the ExtensionManager.
-
-
-
-**Return Parameters**
-
-|Name|Type|Description|
-|---|---|---|
-|extensionManagerAddress|address|Address of the ExtensionManager contract
-
 ### `getFeeInverse`
 
 Return 1 / the fee to pay to the network. e.g. if the fee is 1% (or 0.01), return 100.
