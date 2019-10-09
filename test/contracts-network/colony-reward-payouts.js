@@ -147,7 +147,7 @@ contract("Colony Reward Payouts", accounts => {
       const tokenArgs = getTokenArgs();
       const newToken = await Token.new(...tokenArgs);
       await newToken.unlock();
-      const { logs } = await colonyNetwork.createColony(newToken.address);
+      const { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
       const { colonyAddress } = logs[0].args;
       const newColony = await IColony.at(colonyAddress);
       await newColony.setRewardInverse(100);
@@ -266,7 +266,7 @@ contract("Colony Reward Payouts", accounts => {
       const tokenArgs = getTokenArgs();
       const newToken = await Token.new(...tokenArgs);
       await newToken.unlock();
-      const { logs } = await colonyNetwork.createColony(newToken.address);
+      const { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
       const { colonyAddress } = logs[0].args;
       const newColony = await IColony.at(colonyAddress);
 
@@ -319,7 +319,7 @@ contract("Colony Reward Payouts", accounts => {
       const tokenArgs = getTokenArgs();
       const newToken = await Token.new(...tokenArgs);
       await newToken.unlock();
-      const { logs } = await colonyNetwork.createColony(newToken.address);
+      const { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
       const { colonyAddress } = logs[0].args;
       const newColony = await IColony.at(colonyAddress);
       await newColony.setRewardInverse(100);
@@ -568,11 +568,11 @@ contract("Colony Reward Payouts", accounts => {
       const newToken = await Token.new(...tokenArgs);
       await newToken.unlock();
 
-      let { logs } = await colonyNetwork.createColony(newToken.address);
+      let { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
       let { colonyAddress } = logs[0].args;
       const colony1 = await IColony.at(colonyAddress);
 
-      ({ logs } = await colonyNetwork.createColony(newToken.address));
+      ({ logs } = await colonyNetwork.createColony(newToken.address, "", "", false));
       ({ colonyAddress } = logs[0].args);
       const colony2 = await IColony.at(colonyAddress);
 
@@ -686,11 +686,11 @@ contract("Colony Reward Payouts", accounts => {
       const newToken = await Token.new(...tokenArgs);
       await newToken.unlock();
 
-      let { logs } = await colonyNetwork.createColony(newToken.address);
+      let { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
       let { colonyAddress } = logs[0].args;
       const colony1 = await IColony.at(colonyAddress);
 
-      ({ logs } = await colonyNetwork.createColony(newToken.address));
+      ({ logs } = await colonyNetwork.createColony(newToken.address, "", "", false));
       ({ colonyAddress } = logs[0].args);
       const colony2 = await IColony.at(colonyAddress);
 
@@ -825,7 +825,7 @@ contract("Colony Reward Payouts", accounts => {
         const tokenArgs = getTokenArgs();
         const newToken = await Token.new(...tokenArgs);
         await newToken.unlock();
-        let { logs } = await colonyNetwork.createColony(newToken.address);
+        let { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
         const { colonyAddress } = logs[0].args;
         await newToken.setOwner(colonyAddress);
         const newColony = await IColony.at(colonyAddress);

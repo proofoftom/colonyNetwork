@@ -21,13 +21,13 @@ contract("ColonyNetwork contract upgrade", function() {
     const tokenArgs1 = getTokenArgs();
     const newToken = await Token.new(...tokenArgs1);
     await newToken.unlock();
-    let { logs } = await colonyNetwork.createColony(newToken.address);
+    let { logs } = await colonyNetwork.createColony(newToken.address, "", "", false);
     colonyAddress1 = logs[0].args.colonyAddress;
 
     const tokenArgs2 = getTokenArgs();
     const newToken2 = await Token.new(...tokenArgs2);
     await newToken2.unlock();
-    ({ logs } = await colonyNetwork.createColony(newToken2.address));
+    ({ logs } = await colonyNetwork.createColony(newToken2.address, "", "", false));
     colonyAddress2 = logs[0].args.colonyAddress;
 
     // Setup new Colony contract version on the Network
