@@ -32,7 +32,7 @@ Add a new extension/version to the ExtensionManager.
 |---|---|---|
 |_extensionId|bytes32|keccak256 hash of the extension name, used as an indentifier
 |_resolver|address|The deployed resolver containing the extension contract logic
-|_roles|uint8[]|An array containing the roles required by the extension
+|_roles|bytes32|A bytes array containing the roles required by the extension
 
 
 ### `addr`

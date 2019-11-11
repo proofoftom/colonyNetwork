@@ -89,6 +89,32 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     emit ColonyRoleSet(_user, _domainId, uint8(ColonyRole.Administration), _setTo);
   }
 
+  function setUserRoles(
+    uint256 _permissionDomainId,
+    uint256 _childSkillIndex,
+    address _user,
+    uint256 _domainId,
+    bytes32 _roles,
+    bool _setTo
+  ) public stoppable authDomain(_permissionDomainId, _childSkillIndex, _domainId)
+  {
+    // This is not strictly necessary, since these roles are never used in subdomains
+    require(_roles & ROOT_ROLES == 0 || _domainId == 1, "colony-bad-domain-for-role");
+
+    bytes32 roles = _roles;
+    uint8 roleId;
+
+    while (roles > 0) {
+      if (uint256(roles) % 2 == 1) {
+        ColonyAuthority(address(authority)).setUserRole(_user, _domainId, roleId, _setTo);
+
+        emit ColonyRoleSet(_user, _domainId, roleId, _setTo);
+      }
+      roles >>= 1;
+      roleId += 1;
+    }
+  }
+
   function hasUserRole(address _user, uint256 _domainId, ColonyRole _role) public view returns (bool) {
     return ColonyAuthority(address(authority)).hasUserRole(_user, _domainId, uint8(_role));
   }
@@ -339,6 +365,7 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
   // Add extension manager
   bytes4 constant SIG7 = bytes4(keccak256("setExtensionManager(address"));
   bytes4 constant SIG8 = bytes4(keccak256("addExtension(bytes32,address,uint8[])"));
+  bytes4 constant SIG9 = bytes4(keccak256("setUserRoles(uint256,uint256,address,uint256,bytes32,bool)"));
 
   // v3 to v4
   function finishUpgrade() public always {
@@ -359,6 +386,8 @@ contract Colony is ColonyStorage, PatriciaTreeProofs {
     // Add extension manager
     colonyAuthority.setRoleCapability(uint8(ColonyRole.Root), address(this), SIG7, true);
     colonyAuthority.setRoleCapability(uint8(ColonyRole.Root), address(this), SIG8, true);
+    colonyAuthority.setRoleCapability(uint8(ColonyRole.Root), address(this), SIG9, true);
+    colonyAuthority.setRoleCapability(uint8(ColonyRole.ArchitectureSubdomain), address(this), SIG9, true);
   }
 
   function checkNotAdditionalProtectedVariable(uint256 _slot) public view recovery {
